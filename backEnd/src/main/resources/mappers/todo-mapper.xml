@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.backend.todo.model.mapper.TodoMapper">
+
+<!--    - `selectAllTodos` - SELECT (전체 조회, 우선순위/마감일 정렬)-->
+<!--    - `selectTodoByNo` - SELECT (WHERE TODO_NO = #{todoNo})-->
+<!--    - `selectTodosByStatus` - SELECT (WHERE TODO_STATUS = #{status})-->
+<!--    - `selectTodosByPriority` - SELECT (WHERE PRIORITY = #{priority})-->
+<!--    - `insertTodo` - INSERT-->
+<!--    - `updateTodo` - UPDATE-->
+<!--    - `updateTodoStatus` - UPDATE (상태만)-->
+<!--    - `deleteTodo` - DELETE-->
+<!--    - `selectUpcomingTodos` - SELECT (DUE_DATE BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY))-->
+<!--    - `countByStatus` - SELECT COUNT(*)-->
+
+    <select id="selectAllTodos">
+
+    </select>
+
+    <select id="selectTodoByNo">
+
+    </select>
+
+    <select id="selectTodosByStatus">
+
+    </select>
+
+    <select id="selectTodosByPriority">
+
+    </select>
+
+    <insert id="insertTodo">
+
+    </insert>
+
+    <update id="updateTodo">
+
+    </update>
+
+    <update id="updateTodoStatus">
+
+    </update>
+
+    <delete id="deleteTodo">
+
+    </delete>
+
+    <select id="selectUpcomingTodos">
+
+    </select>
+
+    <select id="countByStatus">
+
+    </select>
+</mapper>
