@@ -1,59 +1,102 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.backend.todo.model.mapper.TodoMapper">
 
-<!--    - `selectAllTodos` - SELECT (전체 조회, 우선순위/마감일 정렬)-->
-<!--    - `selectTodoByNo` - SELECT (WHERE TODO_NO = #{todoNo})-->
-<!--    - `selectTodosByStatus` - SELECT (WHERE TODO_STATUS = #{status})-->
-<!--    - `selectTodosByPriority` - SELECT (WHERE PRIORITY = #{priority})-->
-<!--    - `insertTodo` - INSERT-->
-<!--    - `updateTodo` - UPDATE-->
-<!--    - `updateTodoStatus` - UPDATE (상태만)-->
-<!--    - `deleteTodo` - DELETE-->
-<!--    - `selectUpcomingTodos` - SELECT (DUE_DATE BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY))-->
-<!--    - `countByStatus` - SELECT COUNT(*)-->
-
-    <select id="selectAllTodos">
-
+    <!-- 전체 Todo 조회 (우선순위/마감일 정렬) -->
+    <select id="selectAllTodos" >
+        SELECT *
+        FROM TB_TODO
+        ORDER BY
+            FIELD(PRIORITY, 'HIGH', 'MEDIUM', 'LOW'),
+            DUE_DATE ASC,
+            CREATED_AT DESC
     </select>
 
+    <!-- 특정 Todo 조회 -->
     <select id="selectTodoByNo">
-
+        SELECT *
+        FROM TB_TODO
+        WHERE TODO_NO = #{todoNo}
     </select>
 
+    <!-- 상태별 Todo 조회 -->
     <select id="selectTodosByStatus">
-
+        SELECT *
+        FROM TB_TODO
+        WHERE TODO_STATUS = #{status}
+        ORDER BY
+            FIELD(PRIORITY, 'HIGH', 'MEDIUM', 'LOW'),
+            DUE_DATE ASC
     </select>
 
+    <!-- 우선순위별 조회 -->
     <select id="selectTodosByPriority">
-
+        SELECT *
+        FROM TB_TODO
+        WHERE PRIORITY = #{priority}
+        ORDER BY DUE_DATE ASC
     </select>
 
-    <insert id="insertTodo">
-
+    <!-- Todo 생성 -->
+    <insert id="insertTodo" parameterType="Todo">
+        INSERT INTO TB_TODO (
+            TODO_TITLE,
+            TODO_CONTENT,
+            TODO_STATUS,
+            PRIORITY,
+            DUE_DATE
+        )
+        VALUES (
+                #{todoTitle},
+                #{todoContent},
+                #{todoStatus},
+                #{priority},
+                #{dueDate}
+               )
     </insert>
 
-    <update id="updateTodo">
-
+    <!-- Todo 수정 -->
+    <update id="updateTodo" parameterType="Todo">
+        UPDATE TB_TODO
+        SET
+            TODO_TITLE = #{todoTitle},
+            TODO_CONTENT = #{todoContent},
+            TODO_STATUS = #{todoStatus},
+            PRIORITY = #{priority},
+            DUE_DATE = #{dueDate}
+        WHERE TODO_NO = #{todoNo}
     </update>
 
+    <!-- 상태만 변경 -->
     <update id="updateTodoStatus">
-
+        UPDATE TB_TODO
+        SET TODO_STATUS = #{status}
+        WHERE TODO_NO = #{todoNo}
     </update>
 
+    <!-- Todo 삭제 -->
     <delete id="deleteTodo">
-
+        DELETE FROM TB_TODO
+        WHERE TODO_NO = #{todoNo}
     </delete>
 
+    <!-- 마감임박 Todo (3일 이내) -->
     <select id="selectUpcomingTodos">
-
+        SELECT *
+        FROM TB_TODO
+        WHERE DUE_DATE BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+          AND TODO_STATUS != 'COMPLETED'
+        ORDER BY DUE_DATE ASC
     </select>
 
-    <select id="countByStatus">
-
+    <!-- 상태별 개수 -->
+    <select id="countByStatus" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_TODO
+        WHERE TODO_STATUS = #{status}
     </select>
+
 </mapper>

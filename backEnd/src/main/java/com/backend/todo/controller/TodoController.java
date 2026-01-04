@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +95,12 @@ class TodoController {
         try {
             todoService.createTodo(todo);
             log.info("추가 성공 : {}", todo.getTodoNo());
+
+            Map<String, String> notification = new HashMap<>();
+            notification.put("type", "TODO_CREATED");
+            notification.put("message", "새로운 할 일이 등록되었습니다: " + todo.getTodoTitle());
+            notification.put("priority", todo.getPriority());
+            messagingTemplate.convertAndSend("/topic/notifications", notification);
         } catch (Exception e){
             log.error("추가 실패 : {}", e.getMessage());
         }

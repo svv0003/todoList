@@ -19,6 +19,7 @@ const apiService = {
             return res.data;
         } catch (error) {
             alert("데이터를 가져올 수 없습니다.");
+            return [];
         }
     },
 
@@ -45,7 +46,6 @@ const apiService = {
             alert("상태 변경 실패 : {}", error);
         }
     },
-
 };
 
 export default apiService;

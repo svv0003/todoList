@@ -8,72 +8,34 @@ import java.util.List;
 @Mapper
 public interface TodoMapper {
 
-    /**
-     * 전체 Todo 조회
-     * @return
-     */
+    // 전체 Todo 조회
     List<Todo> selectAllTodos();
 
-    /**
-     * 특정 Todo 조회
-     * @param todoNo
-     * @return
-     */
+    // 특정 Todo 조회
     Todo selectTodoByNo(int todoNo);
 
-    /**
-     * 상태별 Todo 조회
-     * @param status
-     * @return
-     */
+    // 상태별 Todo 조회
     List<Todo> selectTodosByStatus(String status);
 
-    /**
-     * 우선순위별 조회
-     * @param priority
-     * @return
-     */
+    // 우선순위별 조회
     List<Todo> selectTodosByPriority(String priority);
 
-    /**
-     * Todo 생성
-     * @param todo
-     * @return
-     */
+    // Todo 생성
     int insertTodo(Todo todo);
 
-    /**
-     * Todo 수정
-     * @param todo
-     * @return
-     */
+    // Todo 수정
     int updateTodo(Todo todo);
 
-    /**
-     * 상태 변경
-     * @param todoNo
-     * @param status
-     * @return
-     */
+    // 상태만 변경
     int updateTodoStatus(int todoNo, String status);
 
-    /**
-     * Todo 삭제
-     * @param todoNo
-     * @return
-     */
+    // Todo 삭제
     int deleteTodo(int todoNo);
 
-    /**
-     * 마감임박 Todo
-     * @return
-     */
+    // 마감임박 Todo
     List<Todo> selectUpcomingTodos();
 
-    /**
-     * 상태별 개수
-     * @param status
-     * @return
-     */
+    // 상태별 개수
     int countByStatus(String status);
+
 }

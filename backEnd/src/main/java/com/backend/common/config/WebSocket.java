@@ -12,7 +12,7 @@ public class WebSocket implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // 클라이언트가 구독할 경로 설정
+        // 클라이언트가 구독할 메신저 브로커 경로 설정
         registry.enableSimpleBroker("/topic", "/queue");
         // 클라이언트가 메세지를 보낼 경로 설정 (클라이언트 -> 서버)
         registry.setApplicationDestinationPrefixes("/app");
@@ -20,6 +20,7 @@ public class WebSocket implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // WebSocket 엔드포인트 등록
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();

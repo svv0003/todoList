@@ -1,6 +1,3 @@
-import React, {useState, useEffect} from 'react';
-import apiService from "../service/apiService";
-
 /*
 import React, { useState, useEffect } from 'react';
 import apiService from "../service/apiService";
@@ -146,7 +143,16 @@ const TodoForm = ({ onSubmit, initialData = {}, isEdit = false }) => {
     );
 };
 
- */
+
+
+
+
+
+
+
+
+import React, {useState, useEffect} from 'react';
+import apiService from "../service/apiService";
 
 const TodoForm = (onSubmit, initialData, isEdit) => {
     const [todoTitle, setTodoTitle] = useState("");
@@ -227,4 +233,130 @@ const TodoForm = (onSubmit, initialData, isEdit) => {
             </div>
         </>
     )
-}
+ */
+
+import React, { useState, useEffect } from 'react';
+
+const TodoForm = ({ onSubmit, initialData, isEdit }) => {
+    const [todoTitle, setTodoTitle] = useState('');
+    const [todoContent, setTodoContent] = useState('');
+    const [priority, setPriority] = useState('MEDIUM');
+    const [dueDate, setDueDate] = useState('');
+    const [todoStatus, setTodoStatus] = useState('PENDING');
+
+    useEffect(() => {
+        if (initialData) {
+            setTodoTitle(initialData.todoTitle || '');
+            setTodoContent(initialData.todoContent || '');
+            setPriority(initialData.priority || 'MEDIUM');
+            setDueDate(initialData.dueDate || '');
+            setTodoStatus(initialData.todoStatus || 'PENDING');
+        }
+    }, [initialData]);
+
+    const validateForm = () => {
+        if (!todoTitle.trim()) {
+            alert('제목을 입력해주세요.');
+            return false;
+        }
+        if (todoTitle.length > 200) {
+            alert('제목은 200자 이내로 입력해주세요.');
+            return false;
+        }
+        return true;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) return;
+
+        const todoData = {
+            todoTitle: todoTitle.trim(),
+            todoContent: todoContent.trim(),
+            priority,
+            dueDate: dueDate || null,
+            todoStatus
+        };
+
+        if (isEdit && initialData) {
+            todoData.todoNo = initialData.todoNo;
+        }
+
+        onSubmit(todoData);
+    };
+
+    return (
+        <form className="todo-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+                <label htmlFor="todoTitle">제목 *</label>
+                <input
+                    type="text"
+                    id="todoTitle"
+                    value={todoTitle}
+                    onChange={(e) => setTodoTitle(e.target.value)}
+                    placeholder="할 일 제목을 입력하세요"
+                    maxLength={200}
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="todoContent">내용</label>
+                <textarea
+                    id="todoContent"
+                    value={todoContent}
+                    onChange={(e) => setTodoContent(e.target.value)}
+                    placeholder="할 일 내용을 입력하세요"
+                    rows={5}
+                />
+            </div>
+
+            <div className="form-row">
+                <div className="form-group">
+                    <label htmlFor="priority">우선순위</label>
+                    <select
+                        id="priority"
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value)}
+                    >
+                        <option value="LOW">낮음</option>
+                        <option value="MEDIUM">보통</option>
+                        <option value="HIGH">높음</option>
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="dueDate">마감일</label>
+                    <input
+                        type="date"
+                        id="dueDate"
+                        value={dueDate}
+                        onChange={(e) => setDueDate(e.target.value)}
+                    />
+                </div>
+
+                {isEdit && (
+                    <div className="form-group">
+                        <label htmlFor="todoStatus">상태</label>
+                        <select
+                            id="todoStatus"
+                            value={todoStatus}
+                            onChange={(e) => setTodoStatus(e.target.value)}
+                        >
+                            <option value="PENDING">대기중</option>
+                            <option value="IN_PROGRESS">진행중</option>
+                            <option value="COMPLETED">완료</option>
+                        </select>
+                    </div>
+                )}
+            </div>
+
+            <button type="submit" className="submit-btn">
+                {isEdit ? '수정하기' : '등록하기'}
+            </button>
+        </form>
+    );
+};
+
+export default TodoForm;
