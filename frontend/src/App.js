@@ -7,6 +7,8 @@ import TodoDetail from "./pages/TodoDetail";
 import TodoWrite from "./pages/TodoWrite";
 import NotificationToast from "./components/NotificationToast";
 import Header from "./components/Header";
+import LedgerList from "./pages/LedgerList";
+import LedgerWrite from "./pages/LedgerWrite";
 
 function App() {
     // const [user, setUser] = useState(() => {
@@ -40,6 +42,8 @@ function App() {
                             <Route path="/todo" element={<TodoList />} />
                             <Route path="/todo/:id" element={<TodoDetail />} />
                             <Route path="/todo/write" element={<TodoWrite />} />
+                            <Route path="/ledger" element={<LedgerList />} />
+                            <Route path="/ledger/write" element={<LedgerWrite />} />
                         </Routes>
                     </main>
                 </div>
@@ -50,13 +54,24 @@ function App() {
 
 const Home = () => {
     return (
+        <>
         <div className="home-page">
-            <h1>할 일 관리 시스템</h1>
+            <h1>업무 관리</h1>
             <p>효율적으로 업무를 관리하세요!</p>
-            <NavLink to="/todo" className="start-btn">
+            <NavLink to="/todo"
+                     className="start-btn">
                 시작하기
             </NavLink>
         </div>
+        <div className="home-page">
+            <h1>가계 관리</h1>
+            <p>효율적으로 자산을 관리하세요!</p>
+            <NavLink to="/ledger"
+                     className="start-btn">
+                시작하기
+            </NavLink>
+        </div>
+        </>
     );
 }
 

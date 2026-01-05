@@ -3,31 +3,31 @@ import {useNavigate} from 'react-router-dom';
 import Header from "../components/Header";
 import apiService from '../service/apiService';
 import TodoItem from "../components/TodoItems";
-import TodoFilter from "../components/TodoFilter";
-import TodoStatistics from "../components/TodoStatistics";
+import LedgerFilter from "../components/LedgerFilter";
+import LedgerStatistics from "../components/LedgerStatistics";
 
-const TodoList = () => {
+const LedgerList = () => {
 
     const navigate = useNavigate();
-    const [todos, setTodos] = useState([]);
-    const [filter, setFilter] = useState('ALL');        // 'ALL', 'PENDING', 'IN_PROGRESS', 'COMPLETED'
-    const [sortBy, setSortBy] = useState('dueDate');    // 'dueDate', 'priority', 'createdAt'
+    const [lists, setLists] = useState([]);
+    const [filter, setFilter] = useState('ALL');
+    const [sortBy, setSortBy] = useState('dueDate');
     const [loading, setLoading] = useState(false);
     const loginUser = JSON.parse(localStorage.getItem("user") || '{}');
     const loginUserId = loginUser.userId;
 
     useEffect(() => {
-        fetchTodos();
-    }, []);
+        // fetchLists();
+    }, [])
 
-    const fetchTodos = async () => {
+    const fetchLists = async () => {
         setLoading(true);
         try {
-            const res = await apiService.getTodoAll();
-            setTodos(res || []);
+            const res = await apiService.getThisMonth();
+            setLists(res || []);
         } catch (error) {
-            console.error('할 일 목록 조회 실패: ', error);
-            alert('할 일 목록을 불러오는데 실패했습니다.');
+            console.error('내역 조회 실패: ', error);
+            alert('내역을 불러오는데 실패했습니다.');
         } finally {
             setLoading(false);
         }
@@ -44,27 +44,26 @@ const TodoList = () => {
     }
 
     // 삭제
-    const handleDelete = async (todoNo) => {
+    const handleDelete = async (ledgerId) => {
         try {
-            await apiService.deleteTodo(todoNo);
-            setTodos(todos.filter(todo => todo.todoNo !== todoNo));
+            await apiService.deleteList(ledgerId);
+            setLists(lists.filter(list => list.ledgerId !== ledgerId));
             alert('삭제되었습니다.');
         } catch (error) {
             console.error('삭제 실패: ', error);
             alert('삭제에 실패했습니다.');
         }
-
     }
 
     // 상태 변경
-    const handleToggleStatus = async (todoNo, newStatus) => {
+    const handleToggleStatus = async (ledgerId, newStatus) => {
         try {
-            console.log("clickTodoNo: ", todoNo);
-            await apiService.changeStatus(todoNo, newStatus);
-            setTodos(todos.map(todo =>
-                todo.todoNo === todoNo
-                    ? {...todo, todoStatus: newStatus}
-                    : todo
+            console.log("click ledgerId: ", ledgerId);
+            await apiService.changeStatus(ledgerId, newStatus);
+            setLists(lists.map(list =>
+                list.listId === ledgerId
+                    ? {...list, listStatus: newStatus}
+                    : list
             ));
         } catch (error) {
             console.error('상태 변경 실패: ', error);
@@ -73,19 +72,15 @@ const TodoList = () => {
     }
 
     // 필터링
-    const filteredTodos = todos.filter(todo => {
+    const filteredLists = lists.filter(list => {
         if (filter === 'ALL') return true;
-        return todo.todoStatus === filter;
+        return list.listStatus === filter;
     });
 
     // 정렬
-    const sortedTodos = [...filteredTodos].sort((a, b) => {
+    const sortedLists = [...filteredLists].sort((a, b) => {
         switch (sortBy) {
-            case 'dueDate':
-                if (!a.dueDate) return 1;
-                if (!b.dueDate) return -1;
-                return new Date(a.dueDate) - new Date(b.dueDate);
-            case 'priority':
+            case 'price':
                 const priorityOrder = { HIGH: 0, MEDIUM: 1, LOW: 2 };
                 return priorityOrder[a.priority] - priorityOrder[b.priority];
             case 'createdAt':
@@ -99,35 +94,34 @@ const TodoList = () => {
     return (
         <div className="todo-list-page">
             <div className="page-header">
-                <h1>업무 관리</h1>
+                <h1>가계부 관리</h1>
                 <button
                     className="create-btn"
-                    onClick={() => navigate('/todo/write')}>
-                    새로운 업무
+                    onClick={() => navigate('/ledger/write')}>
+                    추가
                 </button>
             </div>
 
             {/*<TodoStatistics />*/}
             {/* 상태 변경 시 실시간 화면 반영하도록 수정 */}
-            <TodoStatistics todos={todos} />
+            <LedgerStatistics lists={lists} />
 
             <div className="filter-section">
-                <TodoFilter
+                <LedgerFilter
                     currentFilter={filter}
                     onFilterChange={handleFilterChange}/>
 
                 <div className="sort-section">
                     <button
                         className="create-btn-mobile"
-                        onClick={() => navigate('/todo/write')}>
-                        업무 추가
+                        onClick={() => navigate('/ledger/write')}>
+                        추가
                     </button>
                     <div>
                         <select value={sortBy}
                                 onChange={(e) =>
                                     handleSortChange(e.target.value)}>
-                            <option value="dueDate">마감일순</option>
-                            <option value="priority">우선순위순</option>
+                            <option value="price">가격순</option>
                             <option value="createdAt">최신순</option>
                         </select>
                     </div>
@@ -136,17 +130,17 @@ const TodoList = () => {
 
             {loading
                 ? (<div className="loading">로딩중...</div>)
-                : sortedTodos.length === 0
+                : sortedLists.length === 0
                     ? (<div className="empty-message">
                             {filter === 'ALL'
-                                ? '등록된 업무가 없습니다.'
-                                : '해당하는 업무가 없습니다.'}
+                                ? '등록된 내역이 없습니다.'
+                                : '해당하는 내역이 없습니다.'}
                     </div>)
                     : (<div className="todo-list">
-                            {sortedTodos.map(todo => (
+                            {sortedLists.map(list => (
                                 <TodoItem
-                                    key={todo.todoNo}
-                                    todo={todo}
+                                    key={list.listId}
+                                    todo={list}
                                     onToggle={handleToggleStatus}
                                     onDelete={handleDelete}/>
                             ))}
@@ -155,4 +149,4 @@ const TodoList = () => {
     );
 };
 
-export default TodoList;
+export default LedgerList;

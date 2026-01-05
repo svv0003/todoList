@@ -2,26 +2,29 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import TodoForm from '../components/TodoForm';
+import LedgerForm from "../components/LedgerForm";
 
-const TodoWrite = () => {
+const LedgerWrite = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const existingTodo = location.state?.todo;
-    const isEdit = !!existingTodo;
+    const existingLedger = location.state?.ledger;
+    const isEdit = !!existingLedger;
 
-    const handleSubmit = async (todoData) => {
+    const handleSubmit = async (ledgerData) => {
         try {
             if (isEdit) {
-                await axios.put(`/api/todo/${existingTodo.todoNo}`, todoData);
+                await axios.put(`/api/ledger/${existingLedger.ledgerId}`, ledgerData);
                 alert('수정되었습니다.');
             } else {
-                await axios.post('/api/todo', todoData);
+                await axios.post('/api/ledger', ledgerData);
                 alert('등록되었습니다.');
             }
-            navigate('/todo');
+            navigate('/ledger');
         } catch (error) {
             console.error('저장 실패:', error);
-            alert(isEdit ? '수정에 실패했습니다.' : '등록에 실패했습니다.');
+            alert(isEdit
+                ? '수정에 실패했습니다.'
+                : '등록에 실패했습니다.');
         }
     };
 
@@ -32,14 +35,13 @@ const TodoWrite = () => {
             {/*</div>*/}
 
             <div className="form-container">
-                <TodoForm
+                <LedgerForm
                     onSubmit={handleSubmit}
-                    initialData={existingTodo}
-                    isEdit={isEdit}
-                />
+                    initialData={existingLedger}
+                    isEdit={isEdit}/>
             </div>
         </div>
     );
 };
 
-export default TodoWrite;
+export default LedgerWrite;

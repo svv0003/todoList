@@ -17,8 +17,8 @@ const TodoDetail = () => {
             const response = await axios.get(`/api/todo/${id}`);
             setTodo(response.data);
         } catch (error) {
-            console.error('할 일 조회 실패:', error);
-            alert('할 일을 불러오는데 실패했습니다.');
+            console.error('업무 조회 실패:', error);
+            alert('업무를 불러오는데 실패했습니다.');
             navigate('/todo');
         } finally {
             setLoading(false);
@@ -67,7 +67,7 @@ const TodoDetail = () => {
     }
 
     if (!todo) {
-        return <div className="error">할 일을 찾을 수 없습니다.</div>;
+        return <div className="error">업무를 찾을 수 없습니다.</div>;
     }
 
     return (

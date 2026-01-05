@@ -23,7 +23,15 @@ const Header = () => {
                             to="/todo"
                             className={({ isActive }) =>
                                 isActive ? 'nav-link active' : 'nav-link'}>
-                            할 일 목록
+                            업무
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/ledger"
+                            className={({ isActive }) =>
+                                isActive ? 'nav-link active' : 'nav-link'}>
+                            가계부
                         </NavLink>
                     </li>
                 </ul>
