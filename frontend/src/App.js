@@ -6,6 +6,7 @@ import PrivateRoute from "./provider/PrivateRoute";
 import TodoDetail from "./pages/TodoDetail";
 import TodoWrite from "./pages/TodoWrite";
 import NotificationToast from "./components/NotificationToast";
+import Header from "./components/Header";
 
 function App() {
     // const [user, setUser] = useState(() => {
@@ -32,30 +33,7 @@ function App() {
             {/*<NotificationToast/>*/}
             <BrowserRouter>
                 <div className="app">
-                    <nav className="navbar">
-                        <div className="nav-container">
-                            <h2 className="logo">Todo App</h2>
-                            <ul className="nav-menu">
-                                <li>
-                                    <NavLink
-                                        to="/"
-                                        className={({ isActive }) =>
-                                            isActive ? 'nav-link active' : 'nav-link'}>
-                                        홈
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink
-                                        to="/todo"
-                                        className={({ isActive }) =>
-                                            isActive ? 'nav-link active' : 'nav-link'}>
-                                        할 일 목록
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-
+                    <Header />
                     <main className="main-content">
                         <Routes>
                             <Route path="/" element={<Home />} />
@@ -76,7 +54,7 @@ const Home = () => {
             <h1>할 일 관리 시스템</h1>
             <p>효율적으로 업무를 관리하세요!</p>
             <NavLink to="/todo" className="start-btn">
-                시작하기 →
+                시작하기
             </NavLink>
         </div>
     );

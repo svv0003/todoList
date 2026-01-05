@@ -237,6 +237,7 @@ const TodoForm = (onSubmit, initialData, isEdit) => {
 
 import React, { useState, useEffect } from 'react';
 
+
 const TodoForm = ({ onSubmit, initialData, isEdit }) => {
     const [todoTitle, setTodoTitle] = useState('');
     const [todoContent, setTodoContent] = useState('');
@@ -318,8 +319,8 @@ const TodoForm = ({ onSubmit, initialData, isEdit }) => {
                     <select
                         id="priority"
                         value={priority}
-                        onChange={(e) => setPriority(e.target.value)}
-                    >
+                        onChange={(e) =>
+                            setPriority(e.target.value)}>
                         <option value="LOW">낮음</option>
                         <option value="MEDIUM">보통</option>
                         <option value="HIGH">높음</option>
@@ -332,7 +333,8 @@ const TodoForm = ({ onSubmit, initialData, isEdit }) => {
                         type="date"
                         id="dueDate"
                         value={dueDate}
-                        onChange={(e) => setDueDate(e.target.value)}
+                        onChange={(e) =>
+                            setDueDate(e.target.value)}
                     />
                 </div>
 
@@ -342,8 +344,8 @@ const TodoForm = ({ onSubmit, initialData, isEdit }) => {
                         <select
                             id="todoStatus"
                             value={todoStatus}
-                            onChange={(e) => setTodoStatus(e.target.value)}
-                        >
+                            onChange={(e) =>
+                                setTodoStatus(e.target.value)}>
                             <option value="PENDING">대기중</option>
                             <option value="IN_PROGRESS">진행중</option>
                             <option value="COMPLETED">완료</option>

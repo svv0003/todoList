@@ -1,13 +1,32 @@
 import {Link, NavLink} from "react-router-dom";
+import React from "react";
 
 const Header = () => {
     return (
         <nav className="navbar">
-            <Link to="/" className="logo">Todo</Link>
-            <div className="nav-links">
-                <NavLink to="/">메인</NavLink>
-                <NavLink to="/todo">할일</NavLink>
-                <NavLink to="/todo/write">글쓰기</NavLink>
+            <div className="nav-container">
+                <NavLink to="/"
+                         className="logo">
+                    Todo App
+                </NavLink>
+                <ul className="nav-menu">
+                    <li>
+                        <NavLink
+                            to="/"
+                            className={({ isActive }) =>
+                                isActive ? 'nav-link active' : 'nav-link'}>
+                            홈
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/todo"
+                            className={({ isActive }) =>
+                                isActive ? 'nav-link active' : 'nav-link'}>
+                            할 일 목록
+                        </NavLink>
+                    </li>
+                </ul>
             </div>
         </nav>
     )

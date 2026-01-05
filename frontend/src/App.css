@@ -70,7 +70,7 @@ body {
 }
 
 .nav-container {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 20px;
     display: flex;
@@ -81,36 +81,40 @@ body {
 
 .logo {
     margin: 0;
-    font-size: 24px;
+    font-size: 30px;
+    font-weight: bolder;
     color: #1976d2;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .nav-menu {
     list-style: none;
     display: flex;
-    gap: 24px;
+    gap: 14px;
     margin: 0;
     padding: 0;
 }
 
 .nav-link {
     text-decoration: none;
-    color: #666;
-    font-size: 16px;
+    color: #000000;
+    background-color: #ededed;
+    font-size: 18px;
     font-weight: 500;
-    padding: 8px 16px;
+    padding: 10px 18px;
     border-radius: 4px;
     transition: all 0.2s;
 }
 
 .nav-link:hover {
-    color: #1976d2;
-    background: #f5f5f5;
+    color: #0061c5;
+    background: #cdcdcd;
 }
 
 .nav-link.active {
-    color: #1976d2;
-    background: #e3f2fd;
+    color: #000000;
+    background: #c0e7ff;
 }
 
 .main-content {
@@ -118,7 +122,7 @@ body {
     padding: 20px;
 }
 .home-page {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 60px auto;
     text-align: center;
     padding: 40px;
@@ -130,13 +134,13 @@ body {
 .home-page h1 {
     font-size: 36px;
     color: #333;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .home-page p {
     font-size: 18px;
     color: #666;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .start-btn {
@@ -147,7 +151,7 @@ body {
     text-decoration: none;
     border-radius: 4px;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 700;
     transition: background 0.2s;
 }
 
@@ -252,9 +256,10 @@ body {
 .delete-btn:hover {
     opacity: 1;
 }
+
 .todo-form {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 1000px;
+    margin: 0;
 }
 
 .form-group {
@@ -337,21 +342,51 @@ body {
     transition: all 0.2s;
 }
 
+.todo-filter {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    margin-bottom: 0;
+    gap: 0;
+}
+
+.filter-btn {
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-radius: 0;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn:first-child {
+    border-left: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+}
+
+.filter-btn:last-child {
+    border-radius: 0 5px 5px 0;
+}
+
 .filter-btn:hover {
     background: #f5f5f5;
 }
 
 .filter-btn.active {
-    background: #1976d2;
+    background: #2b8cef;
     color: white;
-    border-color: #1976d2;
+    border-color: #2781dd;
 }
 
 .todo-statistics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 16px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .stat-item {
@@ -396,7 +431,7 @@ body {
 }
 
 .todo-list-page {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -417,7 +452,7 @@ body {
 
 .create-btn {
     padding: 12px 24px;
-    background: #1976d2;
+    background: #2b8cef;
     color: white;
     border: none;
     border-radius: 4px;
@@ -441,7 +476,7 @@ body {
     align-items: center;
     margin-bottom: 20px;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 20px;
 }
 
 .sort-section {
@@ -450,11 +485,6 @@ body {
     align-items: center;
     width: 100%;
     gap: 8px;
-}
-
-.sort-section label {
-    font-size: 14px;
-    color: #666;
 }
 
 .sort-section select {
@@ -474,6 +504,7 @@ body {
 
 .empty-message {
     text-align: center;
+    margin-top: 10px;
     padding: 60px 20px;
     font-size: 16px;
     color: #999;
@@ -653,7 +684,7 @@ body {
     color: #666;
 }
 .todo-write-page {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -700,9 +731,9 @@ body {
 
 @media (max-width: 768px) {
     .nav-container {
-        flex-direction: column;
+        flex-direction: row;
         height: auto;
-        padding: 10px 20px 20px 20px;
+        padding: 10px;
         gap: 6px;
     }
 
@@ -710,13 +741,50 @@ body {
         margin-top: 12px;
     }
 
+    .logo {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bolder;
+        color: #1976d2;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        list-style: none;
+        display: flex;
+        gap: 14px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: #000000;
+        background-color: #ededed;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+
     .home-page {
-        margin: 20px auto;
+        margin: 0 auto;
         padding: 24px;
     }
 
     .home-page h1 {
-        font-size: 28px;
+        font-size: 24px;
+    }
+
+    .home-page p {
+        font-size: 16px;
+    }
+
+    .home-page .start-btn {
+        padding: 10px 20px;
+        font-size: 14px;
     }
 
     .todo-list-page {
@@ -724,13 +792,11 @@ body {
     }
 
     .page-header {
-        margin-bottom: 10px;
+        margin-bottom: 0;
     }
 
     .page-header h1 {
-        font-size: 24px;
-        font-weight: bold;
-        margin: 0;
+        display: none;
     }
 
     .create-btn {
@@ -739,18 +805,19 @@ body {
 
     .create-btn-mobile {
         display: block;
-        padding: 8px 16px;
-        background: #1976d2;
+        padding: 5.5px 10px;
+        background: #2b8cef;
         color: white;
         border: none;
         border-radius: 4px;
-        font-size: 14px;
-        font-weight: 500;
+        font-size: 12px;
+        font-weight: 700;
         cursor: pointer;
         transition: background 0.2s;
     }
 
-    .create-btn-mobile:hover {
+    .create-btn-mobile:hover,
+    .create-btn-mobile:active {
         background: #1565c0;
     }
 
@@ -758,32 +825,51 @@ body {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 0;
+        margin-bottom: 20px;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 20px;
     }
 
     .todo-filter {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
         width: 100%;
         margin-bottom: 0;
+        gap: 0;
     }
 
     .filter-btn {
-        padding: 10px 22px;
+        width: 100%;
+        padding-top: 6px;
+        padding-bottom: 6px;
         background: white;
         border: 1px solid #ddd;
-        border-radius: 20px;
+        border-left: none;
+        border-radius: 0;
         font-size: 14px;
         cursor: pointer;
         transition: all 0.2s;
     }
 
+    .filter-btn:first-child {
+        border-left: 1px solid #ddd;
+        border-radius: 5px 0 0 5px;
+    }
+
+    .filter-btn:last-child {
+        border-radius: 0 5px 5px 0;
+    }
+
+    .sort-section select {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
     .todo-statistics {
+        width: 100%;
         grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
         gap: 5px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
 
     .todo-list {
@@ -846,6 +932,16 @@ body {
         font-size: 15px;
         opacity: 0.8;
         transition: opacity 0.2s;
+    }
+
+    .todo-write-page {
+        max-width: 1000px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .form-container {
+        padding: 30px;
     }
 
     /*==============================================================

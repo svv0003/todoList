@@ -27,12 +27,9 @@ const TodoWrite = () => {
 
     return (
         <div className="todo-write-page">
-            <div className="page-header">
-                <button className="back-btn" onClick={() => navigate('/todo')}>
-                    ← 취소
-                </button>
-                <h1>{isEdit ? '할 일 수정' : '할 일 등록'}</h1>
-            </div>
+            {/*<div className="page-header">*/}
+            {/*    <h1>{isEdit ? '할 일 수정' : '할 일 등록'}</h1>*/}
+            {/*</div>*/}
 
             <div className="form-container">
                 <TodoForm

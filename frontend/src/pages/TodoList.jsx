@@ -103,7 +103,7 @@ const TodoList = () => {
                 <button
                     className="create-btn"
                     onClick={() => navigate('/todo/write')}>
-                    + 새로운 할 일
+                    새로운 할 일
                 </button>
             </div>
 
@@ -123,7 +123,6 @@ const TodoList = () => {
                         할 일 추가하기
                     </button>
                     <div>
-                        <label>정렬 : </label>
                         <select value={sortBy}
                                 onChange={(e) =>
                                     handleSortChange(e.target.value)}>
