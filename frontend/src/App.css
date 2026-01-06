@@ -268,6 +268,17 @@ body {
     margin-bottom: 20px;
 }
 
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+
 .form-group label {
     display: block;
     margin-bottom: 8px;
@@ -298,6 +309,14 @@ body {
 .form-group textarea {
     resize: vertical;
     min-height: 120px;
+}
+
+.form-row.three {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
 }
 
 .form-row {
@@ -1023,4 +1042,61 @@ body {
         margin: 0;
         font-size: 12px;
     }
+
+    .form-row {
+        display: grid;
+        /*grid-template-columns: 2fr 1fr;*/
+        grid-template-columns: 1fr 2fr;
+        gap: 5px;
+        margin-bottom: 20px;
+    }
+
+    .form-row.two {
+        display: grid;
+        /*grid-template-columns: 2fr 1fr;*/
+        grid-template-columns: 5fr 4fr;
+        gap: 5px;
+        margin-bottom: 20px;
+    }
+
+    .form-row.three {
+        display: grid;
+        width: 100%;
+        grid-template-rows: none;
+        /*grid-template-columns: repeat(3, 1fr);*/
+        grid-template-columns: 2fr 3fr 4fr;
+        gap: 5px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-group label {
+        font-size: 14px;
+    }
+
+    .form-group textarea {
+        min-height: 80px;
+        margin-bottom: 20px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="date"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 12px;
+        font-family: inherit;
+        transition: border-color 0.2s;
+    }
+
+    .form-group input[type="text"] {
+        padding: 9px;
+    }
+
 }

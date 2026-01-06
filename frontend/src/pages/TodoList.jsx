@@ -120,7 +120,7 @@ const TodoList = () => {
                     <button
                         className="create-btn-mobile"
                         onClick={() => navigate('/todo/write')}>
-                        업무 추가
+                        추가
                     </button>
                     <div>
                         <select value={sortBy}

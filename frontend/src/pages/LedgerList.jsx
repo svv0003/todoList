@@ -121,8 +121,8 @@ const LedgerList = () => {
                         <select value={sortBy}
                                 onChange={(e) =>
                                     handleSortChange(e.target.value)}>
-                            <option value="price">가격순</option>
                             <option value="createdAt">최신순</option>
+                            <option value="price">가격순</option>
                         </select>
                     </div>
                 </div>

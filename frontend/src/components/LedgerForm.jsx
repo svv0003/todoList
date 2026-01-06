@@ -253,13 +253,13 @@ export const INCOME_CATEGORY_GROUPS = [
         group: 'OTHER_INCOME',
         label: '기타 소득',
         items: [
-            { value: 'ALLOWANCE_GIFT', label: '용돈' },
-            { value: 'INVESTMENT', label: '투자 수익 (주식·코인·펀드)' },
-            { value: 'INTEREST', label: '이자' },
-            { value: 'DIVIDEND', label: '배당금' },
             { value: 'SIDE_JOB', label: '부수입 (프리랜서·알바)' },
+            { value: 'INVESTMENT', label: '투자 수익 (주식·코인)' },
+            { value: 'DIVIDEND', label: '배당금' },
+            { value: 'INTEREST', label: '이자' },
+            { value: 'ALLOWANCE_GIFT', label: '용돈' },
             { value: 'CASH_BACK', label: '환급 / 캐시백' },
-            { value: 'ETC_INCOME', label: '기타 소득' },
+            { value: 'ETC_INCOME', label: '기타' },
         ],
     },
 ];
@@ -272,8 +272,8 @@ export const EXPENSE_CATEGORY_GROUPS = [
         items: [
             { value: 'RENT', label: '월세 / 전세' },
             { value: 'HOUSING_LOAN', label: '주택 대출 이자' },
-            { value: 'MANAGEMENT_FEE', label: '관리비' },
             { value: 'UTILITY', label: '공과금 (전기·가스·수도)' },
+            { value: 'MANAGEMENT_FEE', label: '관리비' },
             { value: 'COMMUNICATION', label: '통신비' },
             { value: 'INSURANCE', label: '보험료' },
             { value: 'SUBSCRIPTION', label: '구독 서비스' },
@@ -355,7 +355,7 @@ export const EXPENSE_CATEGORY_GROUPS = [
             { value: 'EVENT', label: '경조사' },
             { value: 'GIFT', label: '선물' },
             { value: 'DONATION', label: '기부' },
-            { value: 'ETC_EXPENSE', label: '기타 지출' },
+            { value: 'ETC_EXPENSE', label: '기타' },
         ],
     },
 ];
@@ -422,17 +422,23 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
     }, [initialData]);
 
     const validateForm = () => {
-        if (!ledgerDescription.trim()) {
-            alert('상세 내역을 입력해주세요.');
-            return false;
-        }
+        if (ledgerPrice <= 0) return false;
+        if (!ledgerType) return false;
+        if (!ledgerCategoryGroup) return false;
+        if (!ledgerCategory) return false;
+        if (!ledgerCategory) return false;
+        if (!ledgerPayment) return false;
+        if (!ledgerDescription.trim()) return false;
         return true;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!validateForm()) return;
+        if (!validateForm()) {
+            alert('항목을 모두 입력해주세요.');
+            return;
+        }
 
         const ledgerData = {
             ledgerType,
@@ -452,7 +458,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
 
     return (
         <form className="todo-form" onSubmit={handleSubmit}>
-            <div className="form-row-3">
+            <div className="form-row three">
                 {/* 거래 유형 */}
                 <div className="form-group">
                     <label>구분</label>
@@ -489,20 +495,17 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
 
                 {/* 세부 카테고리 */}
                 <div className="form-group">
-                    <label>세부 항목</label>
+                    <label>세부 카테고리</label>
                     <select
                         value={ledgerCategory}
                         onChange={(e) => setLedgerCategory(e.target.value)}
                         disabled={!ledgerCategoryGroup}
                         required>
-                        {/* 그룹 선택 전 */}
                         {!ledgerCategoryGroup && (
                             <option value="">
                                 카테고리 그룹을 먼저 선택하세요
                             </option>
                         )}
-
-                        {/* 그룹 선택 후 */}
                         {ledgerCategoryGroup && (
                             <>
                                 <option value="">선택하세요</option>
@@ -517,14 +520,27 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
                 </div>
             </div>
 
-            <div className="form-row">
+            <div className="form-row two">
                 <div className="form-group">
-                    <label htmlFor="todoTitle">금액 *</label>
+                    <label htmlFor="todoTitle">금액</label>
+                    {/*<input*/}
+                    {/*    type="number"*/}
+                    {/*    value={ledgerPrice}*/}
+                    {/*    onChange={(e) =>*/}
+                    {/*        setLedgerPrice(e.target.value)}*/}
+                    {/*    required*/}
+                    {/*/>*/}
                     <input
-                        type="number"
-                        value={ledgerPrice}
-                        onChange={(e) =>
-                            setLedgerPrice(e.target.value)}
+                        type="text"
+                        inputMode="decimal"
+                        pattern="[0-9,]*"
+                        value={ledgerPrice === 0 ? '' : Number(ledgerPrice).toLocaleString('ko-KR')}
+                        onChange={(e) => {
+                            const value = e.target.value.replace(/,/g, '');
+                            if (value === '' || /^\d+$/.test(value)) {
+                                setLedgerPrice(value === '' ? 0 : Number(value));
+                            }
+                        }}
                         required
                     />
                 </div>

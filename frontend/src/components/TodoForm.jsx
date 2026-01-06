@@ -289,30 +289,6 @@ const TodoForm = ({ onSubmit, initialData, isEdit }) => {
 
     return (
         <form className="todo-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-                <label htmlFor="todoTitle">제목 *</label>
-                <input
-                    type="text"
-                    id="todoTitle"
-                    value={todoTitle}
-                    onChange={(e) => setTodoTitle(e.target.value)}
-                    placeholder="할 일 제목을 입력하세요"
-                    maxLength={200}
-                    required
-                />
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="todoContent">내용</label>
-                <textarea
-                    id="todoContent"
-                    value={todoContent}
-                    onChange={(e) => setTodoContent(e.target.value)}
-                    placeholder="할 일 내용을 입력하세요"
-                    rows={5}
-                />
-            </div>
-
             <div className="form-row">
                 <div className="form-group">
                     <label htmlFor="priority">우선순위</label>
@@ -352,6 +328,31 @@ const TodoForm = ({ onSubmit, initialData, isEdit }) => {
                         </select>
                     </div>
                 )}
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="todoTitle">제목</label>
+                <input
+                    type="text"
+                    id="todoTitle"
+                    value={todoTitle}
+                    onChange={(e) => setTodoTitle(e.target.value)}
+                    placeholder="제목을 입력하세요"
+                    maxLength={200}
+                    required
+                />
+            </div>
+            <div style={{height: '20px'}}/>
+
+            <div className="form-group">
+                <label htmlFor="todoContent">내용</label>
+                <textarea
+                    id="todoContent"
+                    value={todoContent}
+                    onChange={(e) => setTodoContent(e.target.value)}
+                    placeholder="내용을 입력하세요"
+                    rows={5}
+                />
             </div>
 
             <button type="submit" className="submit-btn">
