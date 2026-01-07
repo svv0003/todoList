@@ -387,11 +387,41 @@ export const PAYMENT_METHODS = [
 ];
 
 
+export const PAYMENT_INSTALLMENT = [
+    {
+        group: 'INCOME',
+        label: '할부 수',
+        items: [
+            { value: '0', label: '(없음)' },
+        ],
+    },
+    {
+        group: 'EXPENSE',
+        label: '할부 수',
+        items: [
+            { value: '1', label: '일시불' },
+            { value: '2', label: '2개월' },
+            { value: '3', label: '3개월' },
+            { value: '4', label: '4개월' },
+            { value: '5', label: '5개월' },
+            { value: '6', label: '6개월' },
+            { value: '7', label: '7개월' },
+            { value: '8', label: '8개월' },
+            { value: '9', label: '9개월' },
+            { value: '10', label: '10개월' },
+            { value: '11', label: '11개월' },
+            { value: '12', label: '12개월' },
+        ],
+    },
+];
+
+
 
 const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
     const [ledgerPrice, setLedgerPrice] = useState(0);
     const [ledgerDescription, setLedgerDescription] = useState('');
     const [ledgerPayment, setLedgerPayment] = useState('');
+    const [ledgerPaymentPeriod, setLedgerPaymentPeriod] = useState(0);
 
     const [ledgerType, setLedgerType] = useState('EXPENSE');
     const [ledgerCategoryGroup, setLedgerCategoryGroup] = useState('');
@@ -407,6 +437,10 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
     );
 
     const paymentGroup = PAYMENT_METHODS.find(
+        (g) => g.group === ledgerType
+    );
+
+    const paymentPeriod = PAYMENT_INSTALLMENT.find(
         (g) => g.group === ledgerType
     );
 
@@ -493,9 +527,9 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
                     </select>
                 </div>
 
-                {/* 세부 카테고리 */}
+                {/* 서브 카테고리 */}
                 <div className="form-group">
-                    <label>세부 카테고리</label>
+                    <label>서브 카테고리</label>
                     <select
                         value={ledgerCategory}
                         onChange={(e) => setLedgerCategory(e.target.value)}
@@ -503,7 +537,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
                         required>
                         {!ledgerCategoryGroup && (
                             <option value="">
-                                카테고리 그룹을 먼저 선택하세요
+                                선택하세요
                             </option>
                         )}
                         {ledgerCategoryGroup && (
@@ -520,7 +554,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
                 </div>
             </div>
 
-            <div className="form-row two">
+            <div className="form-row fourtotwo">
                 <div className="form-group">
                     <label htmlFor="todoTitle">금액</label>
                     {/*<input*/}
@@ -552,6 +586,20 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
                             setLedgerPayment(e.target.value)}>
                         <option value="">선택하세요</option>
                         {paymentGroup?.items.map((item) => (
+                            <option key={item.value} value={item.value}>
+                                {item.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label>할부</label>
+                    <select
+                        value={ledgerPaymentPeriod}
+                        onChange={(e) =>
+                            setLedgerPaymentPeriod(e.target.value)}>
+                        <option value="">선택하세요</option>
+                        {paymentPeriod?.items.map((item) => (
                             <option key={item.value} value={item.value}>
                                 {item.label}
                             </option>
