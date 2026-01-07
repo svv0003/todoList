@@ -38,7 +38,7 @@ class TodoController {
     public ResponseEntity<Todo> getTodoDetail(@PathVariable int id) {
         log.info("=====특정 Todo 조회=====");
         try {
-            Todo res = todoService.getTodoByNo(id);
+            Todo res = todoService.getTodoById(id);
             log.info("조회 성공 {}", res);
             return ResponseEntity.ok(res);
         } catch (Exception e){

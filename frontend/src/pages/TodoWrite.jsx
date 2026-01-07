@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import TodoForm from '../components/TodoForm';
+import apiService from "../service/apiService";
 
 const TodoWrite = () => {
     const navigate = useNavigate();
@@ -12,10 +13,10 @@ const TodoWrite = () => {
     const handleSubmit = async (todoData) => {
         try {
             if (isEdit) {
-                await axios.put(`/api/todo/${existingTodo.todoNo}`, todoData);
+                await apiService.updateTodo(existingTodo.todoNo, todoData);
                 alert('수정되었습니다.');
             } else {
-                await axios.post('/api/todo', todoData);
+                await apiService.addTodo(todoData);
                 alert('등록되었습니다.');
             }
             navigate('/todo');

@@ -421,6 +421,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
     const [ledgerPrice, setLedgerPrice] = useState(0);
     const [ledgerDescription, setLedgerDescription] = useState('');
     const [ledgerPayment, setLedgerPayment] = useState('');
+    const [ledgerPaymentDate, setLedgerPaymentDate] = useState('');
     const [ledgerPaymentPeriod, setLedgerPaymentPeriod] = useState(0);
 
     const [ledgerType, setLedgerType] = useState('EXPENSE');
@@ -451,6 +452,8 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
             setLedgerCategory(initialData.ledgerCategory || '');
             setLedgerPrice(initialData.ledgerPrice || 0);
             setLedgerPayment(initialData.ledgerPayment || '');
+            setLedgerPaymentDate(initialData.ledgerPaymentDate || '');
+            setLedgerPaymentPeriod(initialData.ledgerPaymentPeriod || 0);
             setLedgerDescription(initialData.ledgerDescription || '');
         }
     }, [initialData]);
@@ -460,8 +463,10 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
         if (!ledgerType) return false;
         if (!ledgerCategoryGroup) return false;
         if (!ledgerCategory) return false;
-        if (!ledgerCategory) return false;
+        if (!ledgerPrice) return false;
         if (!ledgerPayment) return false;
+        if (!ledgerPaymentDate) return false;
+        if (!ledgerPaymentPeriod) return false;
         if (!ledgerDescription.trim()) return false;
         return true;
     };
@@ -480,6 +485,8 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
             ledgerCategory,
             ledgerPrice: Number(ledgerPrice),
             ledgerPayment,
+            ledgerPaymentDate,
+            ledgerPaymentPeriod,
             ledgerDescription,
         };
 
@@ -529,7 +536,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
 
                 {/* 서브 카테고리 */}
                 <div className="form-group">
-                    <label>서브 카테고리</label>
+                    <label>상세 내역</label>
                     <select
                         value={ledgerCategory}
                         onChange={(e) => setLedgerCategory(e.target.value)}
@@ -556,26 +563,13 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
 
             <div className="form-row fourtotwo">
                 <div className="form-group">
-                    <label htmlFor="todoTitle">금액</label>
-                    {/*<input*/}
-                    {/*    type="number"*/}
-                    {/*    value={ledgerPrice}*/}
-                    {/*    onChange={(e) =>*/}
-                    {/*        setLedgerPrice(e.target.value)}*/}
-                    {/*    required*/}
-                    {/*/>*/}
+                    <label htmlFor="dueDate">마감일</label>
                     <input
-                        type="text"
-                        inputMode="decimal"
-                        pattern="[0-9,]*"
-                        value={ledgerPrice === 0 ? '' : Number(ledgerPrice).toLocaleString('ko-KR')}
-                        onChange={(e) => {
-                            const value = e.target.value.replace(/,/g, '');
-                            if (value === '' || /^\d+$/.test(value)) {
-                                setLedgerPrice(value === '' ? 0 : Number(value));
-                            }
-                        }}
-                        required
+                        type="date"
+                        id="ledgerPaymentDate"
+                        value={ledgerPaymentDate}
+                        onChange={(e) =>
+                            setLedgerPaymentDate(e.target.value)}
                     />
                 </div>
                 <div className="form-group">
@@ -606,6 +600,30 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
                         ))}
                     </select>
                 </div>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="todoTitle">금액</label>
+                {/*<input*/}
+                {/*    type="number"*/}
+                {/*    value={ledgerPrice}*/}
+                {/*    onChange={(e) =>*/}
+                {/*        setLedgerPrice(e.target.value)}*/}
+                {/*    required*/}
+                {/*/>*/}
+                <input
+                    type="text"
+                    inputMode="decimal"
+                    pattern="[0-9,]*"
+                    value={ledgerPrice === 0 ? '' : Number(ledgerPrice).toLocaleString('ko-KR')}
+                    onChange={(e) => {
+                        const value = e.target.value.replace(/,/g, '');
+                        if (value === '' || /^\d+$/.test(value)) {
+                            setLedgerPrice(value === '' ? 0 : Number(value));
+                        }
+                    }}
+                    required
+                />
             </div>
 
             <div className="form-group">

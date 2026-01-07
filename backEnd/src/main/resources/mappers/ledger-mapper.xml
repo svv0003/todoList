@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.backend.ledger.model.mapper.LedgerMapper">
+
+<!--    &lt;!&ndash; 전체 ledger 조회 (우선순위/마감일 정렬) &ndash;&gt;-->
+<!--    <select id="selectAllTodos" >-->
+<!--        SELECT *-->
+<!--        FROM TB_TODO-->
+<!--        ORDER BY-->
+<!--            FIELD(PRIORITY, 'HIGH', 'MEDIUM', 'LOW'),-->
+<!--            DUE_DATE ASC,-->
+<!--            CREATED_AT DESC-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 특정 ledger 조회 &ndash;&gt;-->
+<!--    <select id="selectTodoByNo">-->
+<!--        SELECT *-->
+<!--        FROM TB_TODO-->
+<!--        WHERE TODO_NO = #{todoNo}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 상태별 ledger 조회 &ndash;&gt;-->
+<!--    <select id="selectTodosByStatus">-->
+<!--        SELECT *-->
+<!--        FROM TB_TODO-->
+<!--        WHERE TODO_STATUS = #{status}-->
+<!--        ORDER BY-->
+<!--            FIELD(PRIORITY, 'HIGH', 'MEDIUM', 'LOW'),-->
+<!--            DUE_DATE ASC-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 우선순위별 조회 &ndash;&gt;-->
+<!--    <select id="selectTodosByPriority">-->
+<!--        SELECT *-->
+<!--        FROM TB_TODO-->
+<!--        WHERE PRIORITY = #{priority}-->
+<!--        ORDER BY DUE_DATE ASC-->
+<!--    </select>-->
+
+    <!-- ledger 생성 -->
+    <insert id="insertLedger" parameterType="Ledger">
+        INSERT INTO TB_LEDGER (
+            LEDGER_TYPE,
+            LEDGER_CATEGORY_GROUP,
+            LEDGER_CATEGORY,
+            LEDGER_PRICE,
+            LEDGER_PAYMENT,
+            LEDGER_PAYMENT_INSTALLMENT,
+            LEDGER_DESCRIPTION,
+            LEDGER_PAYMENT_DATE
+        )
+        VALUES (
+                #{ledgerType},
+                #{ledgerCategoryGroup},
+                #{ledgerCategory},
+                #{ledgerPrice},
+                #{ledgerPayment},
+                #{ledgerPaymentInstallment},
+                #{ledgerDescription},
+                #{ledgerPaymentDate}
+               )
+    </insert>
+
+    <!-- ledger 수정 -->
+    <update id="updateLedger" parameterType="Ledger">
+        UPDATE TB_LEDGER
+        SET
+            LEDGER_TYPE = #{ledgerType},
+            LEDGER_CATEGORY_GROUP = #{ledgerCategoryGroup},
+            LEDGER_CATEGORY = #{ledgerCategory},
+            LEDGER_PRICE = #{ledgerPrice},
+            LEDGER_PAYMENT = #{ledgerPayment},
+            LEDGER_PAYMENT_INSTALLMENT = #{ledgerPaymentInstallment},
+            LEDGER_DESCRIPTION = #{ledgerDescription},
+            LEDGER_PAYMENT_DATE = #{ledgerPaymentDate}
+        WHERE LEDGER_ID = #{ledgerId}
+    </update>
+
+    <!-- ledger 삭제 -->
+    <delete id="deleteLedger">
+        DELETE FROM TB_LEDGER
+        WHERE LEDGER_ID = #{ledgerId}
+    </delete>
+
+<!--    &lt;!&ndash; 마감임박 Todo (3일 이내) &ndash;&gt;-->
+<!--    <select id="selectUpcomingTodos">-->
+<!--        SELECT *-->
+<!--        FROM TB_TODO-->
+<!--        WHERE DUE_DATE BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)-->
+<!--          AND TODO_STATUS != 'COMPLETED'-->
+<!--        ORDER BY DUE_DATE ASC-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 상태별 개수 &ndash;&gt;-->
+<!--    <select id="countByStatus" resultType="int">-->
+<!--        SELECT COUNT(*)-->
+<!--        FROM TB_TODO-->
+<!--        WHERE TODO_STATUS = #{status}-->
+<!--    </select>-->
+
+</mapper>

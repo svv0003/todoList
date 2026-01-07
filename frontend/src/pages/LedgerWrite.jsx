@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import TodoForm from '../components/TodoForm';
 import LedgerForm from "../components/LedgerForm";
+import apiService from "../service/apiService";
 
 const LedgerWrite = () => {
     const navigate = useNavigate();
@@ -12,11 +13,20 @@ const LedgerWrite = () => {
 
     const handleSubmit = async (ledgerData) => {
         try {
+            /*
             if (isEdit) {
-                await axios.put(`/api/ledger/${existingLedger.ledgerId}`, ledgerData);
+                await apiService.updateTodo(existingTodo.todoNo, todoData);
                 alert('수정되었습니다.');
             } else {
-                await axios.post('/api/ledger', ledgerData);
+                await apiService.addTodo(todoData);
+                alert('등록되었습니다.');
+            }
+             */
+            if (isEdit) {
+                await apiService.updateLedger(existingLedger.ledgerId, ledgerData);
+                alert('수정되었습니다.');
+            } else {
+                await apiService.addLedger(ledgerData);
                 alert('등록되었습니다.');
             }
             navigate('/ledger');

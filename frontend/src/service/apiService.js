@@ -24,19 +24,41 @@ const apiService = {
     },
 
     /**
+     * todo 추가
+     */
+    addTodo: async (todoData) => {
+        try {
+            await api.post('/todo', todoData);
+        } catch (error) {
+            alert("todo 추가 실패 : {}", error);
+        }
+    },
+
+    /**
+     * todo 수정
+     */
+    updateTodo: async (todoNo, todoData) => {
+        try {
+            await api.put(`/todo/${todoNo}`, todoData);
+        } catch (error) {
+            alert("todo 수정 실패 : {}", error);
+        }
+    },
+
+    /**
      * todo 삭제
      */
     deleteTodo: async (todoNo) => {
         try {
             await api.delete(`/todo/${todoNo}`);
         } catch (error) {
-            alert("삭제 실패 : {}", error);
+            alert("todo 삭제 실패 : {}", error);
         }
     },
 
     /**
      * todo 상태 변경
-     * */
+     */
     changeStatus: async (todoNo, newStatus) => {
         try {
             await api.patch(`/todo/${todoNo}/status`, {
@@ -46,6 +68,42 @@ const apiService = {
             alert("상태 변경 실패 : {}", error);
         }
     },
+
+    /**
+     * ledger 추가
+     */
+    addLedger: async (ledgerData) => {
+        try {
+            await api.post('/ledger', ledgerData);
+        } catch (error) {
+            alert("ledger 추가 실패 : {}", error);
+        }
+    },
+
+    /**
+     * ledger 수정
+     */
+    updateLedger: async (ledgerId, ledgerData) => {
+        try {
+            await api.put(`/ledger/${ledgerId}`, ledgerData);
+        } catch (error) {
+            alert("ledger 수정 실패 : {}", error);
+        }
+    },
+
+    /**
+     * ledger 삭제
+     */
+    deleteLedger: async (ledgerId) => {
+        try {
+            await api.delete(`/ledger/${ledgerId}`);
+        } catch (error) {
+            alert("ledger 삭제 실패 : {}", error);
+        }
+    },
+
+
+
 };
 
 export default apiService;

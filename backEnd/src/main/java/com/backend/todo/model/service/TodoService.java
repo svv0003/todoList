@@ -1,17 +1,19 @@
 package com.backend.todo.model.service;
 
 import com.backend.todo.model.dto.Todo;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
+@Component
 public interface TodoService {
 
     // 전체 Todo 조회
     List<Todo> getAllTodos();
 
     // 특정 Todo 조회
-    Todo getTodoByNo(int todoNo);
+    Todo getTodoById(int todoNo);
 
     // 상태별 Todo 조회
     List<Todo> getTodosByStatus(String status);

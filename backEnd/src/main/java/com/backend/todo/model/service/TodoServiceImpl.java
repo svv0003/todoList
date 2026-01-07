@@ -3,6 +3,7 @@ package com.backend.todo.model.service;
 import com.backend.todo.model.dto.Todo;
 import com.backend.todo.model.mapper.TodoMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
@@ -22,7 +24,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Todo getTodoByNo(int todoNo) {
+    public Todo getTodoById(int todoNo) {
         return todoMapper.selectTodoByNo(todoNo);
     }
 
