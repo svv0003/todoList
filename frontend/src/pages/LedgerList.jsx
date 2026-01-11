@@ -1,30 +1,48 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Header from "../components/Header";
 import apiService from '../service/apiService';
-import TodoItem from "../components/TodoItems";
 import LedgerFilter from "../components/LedgerFilter";
 import LedgerStatistics from "../components/LedgerStatistics";
+import LedgerItems from "../components/LedgerItems";
+import LedgerSearchFilter from "../components/LedgerSearchFilter";
 
 const LedgerList = () => {
 
     const navigate = useNavigate();
-    const [lists, setLists] = useState([]);
-    const [filter, setFilter] = useState('ALL');
-    const [sortBy, setSortBy] = useState('dueDate');
+
+    const [filter, setFilter] = useState({
+        periodType: 'currentMonth',
+        ledgerCategoryGroup: null,
+        ledgerCategory: null,
+        searchKeyword: '',
+        year: null,
+        month: null,
+        startDate: null,
+        endDate: null,
+    });
+
+    const [typeFilter, setTypeFilter] = useState('ALL');
+    const [sortBy, setSortBy] = useState('paymentDateDesc');
+
+    const [tempFilter, setTempFilter] = useState(filter);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+    const [ledgers, setLedgers] = useState([]);
     const [loading, setLoading] = useState(false);
+
     const loginUser = JSON.parse(localStorage.getItem("user") || '{}');
     const loginUserId = loginUser.userId;
 
     useEffect(() => {
-        // fetchLists();
-    }, [])
+        fetchLedgers();
+    }, [filter])
 
-    const fetchLists = async () => {
+    const fetchLedgers = async () => {
         setLoading(true);
         try {
-            const res = await apiService.getThisMonth();
-            setLists(res || []);
+            const res = await apiService.getLedgersByFilter(filter);
+            setLedgers(res || []);
         } catch (error) {
             console.error('내역 조회 실패: ', error);
             alert('내역을 불러오는데 실패했습니다.');
@@ -33,21 +51,51 @@ const LedgerList = () => {
         }
     }
 
-    // 필터 변경
-    const handleFilterChange = (newFilter) => {
-        setFilter(newFilter);
-    }
+    // 소득/지출/할부
+    const filteredLedgers = useMemo(() => {
+        return ledgers.filter(ledger => {
+            switch (typeFilter) {
+                case 'INCOME':
+                    return ledger.ledgerType === 'INCOME';
+                case 'EXPENSE':
+                    return ledger.ledgerType === 'EXPENSE';
+                case 'INSTALLMENT':
+                    return ledger.ledgerPaymentInstallment > 1;
+                case 'ALL':
+                default:
+                    return true;
+            }
+        });
+    }, [ledgers, typeFilter]);
+
 
     // 정렬 변경
-    const handleSortChange = (newSort) => {
-        setSortBy(newSort);
-    }
+    const handleSortChange = useMemo(() => {
+        const list = [...filteredLedgers];
+
+        switch (sortBy) {
+            case 'paymentDateAsc':
+                return list.sort(
+                    (a, b) => new Date(a.paymentDate) - new Date(b.paymentDate)
+                );
+            case 'priceDesc':
+                return list.sort((a, b) => b.price - a.price);
+            case 'priceAsc':
+                return list.sort((a, b) => a.price - b.price);
+            case 'paymentDateDesc':
+            default:
+                return list.sort(
+                    (a, b) => new Date(b.paymentDate) - new Date(a.paymentDate)
+                );
+        }
+    }, [filteredLedgers, sortBy]);
 
     // 삭제
     const handleDelete = async (ledgerId) => {
+        if (!window.confirm('정말 삭제하시겠습니까?')) return;
         try {
-            await apiService.deleteList(ledgerId);
-            setLists(lists.filter(list => list.ledgerId !== ledgerId));
+            await apiService.deleteLedger(ledgerId);
+            setLedgers(prev => prev.filter(l => l.ledgerId !== ledgerId));
             alert('삭제되었습니다.');
         } catch (error) {
             console.error('삭제 실패: ', error);
@@ -55,40 +103,6 @@ const LedgerList = () => {
         }
     }
 
-    // 상태 변경
-    const handleToggleStatus = async (ledgerId, newStatus) => {
-        try {
-            console.log("click ledgerId: ", ledgerId);
-            await apiService.changeStatus(ledgerId, newStatus);
-            setLists(lists.map(list =>
-                list.listId === ledgerId
-                    ? {...list, listStatus: newStatus}
-                    : list
-            ));
-        } catch (error) {
-            console.error('상태 변경 실패: ', error);
-            alert('상태 변경에 실패했습니다.');
-        }
-    }
-
-    // 필터링
-    const filteredLists = lists.filter(list => {
-        if (filter === 'ALL') return true;
-        return list.listStatus === filter;
-    });
-
-    // 정렬
-    const sortedLists = [...filteredLists].sort((a, b) => {
-        switch (sortBy) {
-            case 'price':
-                const priorityOrder = { HIGH: 0, MEDIUM: 1, LOW: 2 };
-                return priorityOrder[a.priority] - priorityOrder[b.priority];
-            case 'createdAt':
-                return new Date(b.createdAt) - new Date(a.createdAt);
-            default:
-                return 0;
-        }
-    });
 
 
     return (
@@ -104,12 +118,12 @@ const LedgerList = () => {
 
             {/*<TodoStatistics />*/}
             {/* 상태 변경 시 실시간 화면 반영하도록 수정 */}
-            <LedgerStatistics lists={lists} />
+            <LedgerStatistics lists={ledgers} />
 
             <div className="filter-section">
                 <LedgerFilter
-                    currentFilter={filter}
-                    onFilterChange={handleFilterChange}/>
+                    currentFilter={typeFilter}
+                    onFilterChange={setTypeFilter}/>
 
                 <div className="sort-section">
                     <button
@@ -117,12 +131,22 @@ const LedgerList = () => {
                         onClick={() => navigate('/ledger/write')}>
                         추가
                     </button>
+                    <button
+                        className="filterBtn"
+                        onClick={() => {
+                            setTempFilter(filter);
+                            setIsFilterOpen(true);
+                        }}>
+                        필터
+                    </button>
                     <div>
                         <select value={sortBy}
                                 onChange={(e) =>
                                     handleSortChange(e.target.value)}>
-                            <option value="createdAt">최신순</option>
-                            <option value="price">가격순</option>
+                            <option value="paymentDateDesc">최신순</option>
+                            <option value="paymentDateAsc">오래된순</option>
+                            <option value="priceDesc">금액 높은순</option>
+                            <option value="priceAsc">금액 낮은순</option>
                         </select>
                     </div>
                 </div>
@@ -130,21 +154,68 @@ const LedgerList = () => {
 
             {loading
                 ? (<div className="loading">로딩중...</div>)
-                : sortedLists.length === 0
-                    ? (<div className="empty-message">
-                            {filter === 'ALL'
-                                ? '등록된 내역이 없습니다.'
-                                : '해당하는 내역이 없습니다.'}
-                    </div>)
-                    : (<div className="todo-list">
-                            {sortedLists.map(list => (
-                                <TodoItem
-                                    key={list.listId}
-                                    todo={list}
-                                    onToggle={handleToggleStatus}
-                                    onDelete={handleDelete}/>
-                            ))}
-                    </div>)}
+                : ledgers.length === 0 ? (
+                    <div className="empty">조회된 내역이 없습니다.</div>
+                ) : (
+                    <div className="ledger-list">
+                        {filteredLedgers.map(ledger => (
+                            <LedgerItems
+                                key={ledger.ledgerId}
+                                ledger={ledger}
+                                onDelete={handleDelete}
+                            />
+                        ))}
+                    </div>
+                )
+            }
+
+            {isFilterOpen && (
+                <div className="filter-modal-overlay">
+                    <div className="filter-modal">
+                        <div className="modal-header">
+                            <h2>필터</h2>
+                            <button onClick={() => setIsFilterOpen(false)}>✕</button>
+                        </div>
+
+                        <div className="modal-body">
+                            <LedgerSearchFilter
+                                currentFilter={tempFilter}
+                                onFilterChange={(newFilter) =>
+                                    setTempFilter(prev => ({ ...prev, ...newFilter }))
+                                }
+                            />
+                        </div>
+
+                        <div className="modal-footer">
+                            <button
+                                className="reset-btn"
+                                onClick={() =>
+                                    setTempFilter({
+                                        periodType: 'currentMonth',
+                                        ledgerCategoryGroup: null,
+                                        ledgerCategory: null,
+                                        searchKeyword: '',
+                                        year: null,
+                                        month: null,
+                                        startDate: null,
+                                        endDate: null,
+                                    })
+                                }>
+                                초기화
+                            </button>
+
+                            <button
+                                className="apply-btn"
+                                onClick={() => {
+                                    setFilter(tempFilter);
+                                    setIsFilterOpen(false);
+                                }}>
+                                적용
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

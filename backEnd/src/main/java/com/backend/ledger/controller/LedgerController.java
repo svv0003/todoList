@@ -1,13 +1,17 @@
 package com.backend.ledger.controller;
 
 import com.backend.ledger.model.dto.Ledger;
+import com.backend.ledger.model.dto.LedgerFilter;
 import com.backend.ledger.model.service.LedgerService;
+import com.backend.todo.model.dto.Todo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -18,6 +22,33 @@ public class LedgerController {
 
     private final LedgerService ledgerService;
     private final SimpMessagingTemplate messagingTemplate;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Ledger>> getAllLedgersByFilter(
+            @ModelAttribute LedgerFilter filter) {
+        log.info("=====전체 Todo 조회=====");
+        try {
+            List<Ledger> res = ledgerService.getAllLedgersByFilter(filter);
+            log.info("조회 성공 {}", res);
+            return ResponseEntity.ok(res);
+        } catch (Exception e){
+            log.error("조회 실패 : {}", e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @GetMapping("/{ledgerId}")
+    public ResponseEntity<Ledger> getTodoDetail(@PathVariable int ledgerId) {
+        log.info("=====특정 Todo 조회=====");
+        try {
+            Ledger res = ledgerService.getLedgerById(ledgerId);
+            log.info("조회 성공 {}", res);
+            return ResponseEntity.ok(res);
+        } catch (Exception e) {
+            log.error("조회 실패 : {}", e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
     @PostMapping()
     public void createLedger(@RequestBody Ledger ledger) {

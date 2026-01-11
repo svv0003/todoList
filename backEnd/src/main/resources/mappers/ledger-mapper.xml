@@ -5,40 +5,142 @@
 
 <mapper namespace="com.backend.ledger.model.mapper.LedgerMapper">
 
-<!--    &lt;!&ndash; 전체 ledger 조회 (우선순위/마감일 정렬) &ndash;&gt;-->
-<!--    <select id="selectAllTodos" >-->
+    <!-- 전체 Ledger 조회 (정렬) -->
+    <select id="selectAllLedgers" >
+        SELECT *
+        FROM TB_LEDGER
+        ORDER BY CREATED_AT DESC
+    </select>
+
+    <!-- 특정 Ledger 조회 -->
+    <select id="selectLedgerById" resultType="Ledger">
+        SELECT *
+        FROM TB_LEDGER
+        WHERE LEDGER_ID = #{ledgerId}
+    </select>
+
+    <!-- 이번 달(현재까지) Ledger 조회 -->
+<!--    <select id="selectCurrentMonthLedgers" resultType="Ledger">-->
 <!--        SELECT *-->
-<!--        FROM TB_TODO-->
-<!--        ORDER BY-->
-<!--            FIELD(PRIORITY, 'HIGH', 'MEDIUM', 'LOW'),-->
-<!--            DUE_DATE ASC,-->
-<!--            CREATED_AT DESC-->
+<!--        FROM TB_LEDGER-->
+<!--        WHERE YEAR(LEDGER_PAYMENT_DATE) = YEAR(CURRENT_DATE)-->
+<!--          AND MONTH(LEDGER_PAYMENT_DATE) = MONTH(CURRENT_DATE)-->
+<!--        ORDER BY LEDGER_PAYMENT_DATE DESC, CREATED_AT DESC-->
 <!--    </select>-->
 
-<!--    &lt;!&ndash; 특정 ledger 조회 &ndash;&gt;-->
-<!--    <select id="selectTodoByNo">-->
+    <!-- 월별 Ledger 조회 -->
+<!--    <select id="selectLedgersByYearMonth" resultType="Ledger">-->
 <!--        SELECT *-->
-<!--        FROM TB_TODO-->
-<!--        WHERE TODO_NO = #{todoNo}-->
+<!--        FROM TB_LEDGER-->
+<!--        <where>-->
+<!--            <if test="year != null">-->
+<!--                YEAR(LEDGER_PAYMENT_DATE) = #{year}-->
+<!--            </if>-->
+<!--            <if test="month != null">-->
+<!--                AND MONTH(LEDGER_PAYMENT_DATE) = #{month}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        ORDER BY LEDGER_PAYMENT_DATE DESC, CREATED_AT DESC-->
 <!--    </select>-->
 
-<!--    &lt;!&ndash; 상태별 ledger 조회 &ndash;&gt;-->
-<!--    <select id="selectTodosByStatus">-->
+    <!-- 년도별 Ledger 조회 -->
+<!--    <select id="selectLedgersByYear" resultType="Ledger">-->
 <!--        SELECT *-->
-<!--        FROM TB_TODO-->
-<!--        WHERE TODO_STATUS = #{status}-->
-<!--        ORDER BY-->
-<!--            FIELD(PRIORITY, 'HIGH', 'MEDIUM', 'LOW'),-->
-<!--            DUE_DATE ASC-->
+<!--        FROM TB_LEDGER-->
+<!--        <where>-->
+<!--            <if test="year != null">-->
+<!--                YEAR(LEDGER_PAYMENT_DATE) = #{year}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        ORDER BY LEDGER_PAYMENT_DATE DESC, CREATED_AT DESC-->
 <!--    </select>-->
 
-<!--    &lt;!&ndash; 우선순위별 조회 &ndash;&gt;-->
-<!--    <select id="selectTodosByPriority">-->
+    <!-- 특정 기간 Ledger 조회 -->
+<!--    <select id="selectLedgersByDateRange" resultType="Ledger">-->
 <!--        SELECT *-->
-<!--        FROM TB_TODO-->
-<!--        WHERE PRIORITY = #{priority}-->
-<!--        ORDER BY DUE_DATE ASC-->
+<!--        FROM TB_LEDGER-->
+<!--        <where>-->
+<!--            <if test="startDate != null">-->
+<!--                LEDGER_PAYMENT_DATE >= #{startDate}-->
+<!--            </if>-->
+<!--            <if test="endDate != null">-->
+<!--                AND LEDGER_PAYMENT_DATE <= #{endDate}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        ORDER BY LEDGER_PAYMENT_DATE DESC, CREATED_AT DESC-->
 <!--    </select>-->
+
+    <!-- Ledger 조회 필터링 -->
+    <select id="selectLedgersByFilters" resultType="Ledger">
+        SELECT *
+        FROM TB_LEDGER
+        <where>
+            <!-- 기본: 이번 달 (periodType 없거나 currentMonth) -->
+            <if test="periodType == null or periodType == 'currentMonth'">
+                <![CDATA[
+                YEAR(LEDGER_PAYMENT_DATE) = YEAR(CURRENT_DATE)
+                AND MONTH(LEDGER_PAYMENT_DATE) = MONTH(CURRENT_DATE)
+                ]]>
+            </if>
+
+            <!-- 월별 조회 -->
+            <if test="periodType == 'yearMonth'">
+                <if test="year != null">
+                    YEAR(LEDGER_PAYMENT_DATE) = #{year}
+                </if>
+                <if test="month != null">
+                    AND MONTH(LEDGER_PAYMENT_DATE) = #{month}
+                </if>
+            </if>
+
+            <!-- 년도 전체 조회 -->
+            <if test="periodType == 'year'">
+                <if test="year != null">
+                    YEAR(LEDGER_PAYMENT_DATE) = #{year}
+                </if>
+            </if>
+
+            <!-- 사용자 지정 기간 -->
+            <if test="periodType == 'custom'">
+                <![CDATA[
+                <if test="startDate != null">
+                    LEDGER_PAYMENT_DATE >= #{startDate}
+                </if>
+                <if test="endDate != null">
+                    AND LEDGER_PAYMENT_DATE <= #{endDate}
+                </if>
+                ]]>
+            </if>
+
+            <!-- 지출/소득 타입 -->
+            <if test="ledgerType != null">
+                AND LEDGER_TYPE = #{ledgerType}
+            </if>
+
+            <!-- 할부 내역만 (2개월 이상) -->
+            <if test="installmentOnly == true">
+                AND LEDGER_PAYMENT_INSTALLMENT IS NOT NULL
+                AND LEDGER_PAYMENT_INSTALLMENT >= 2
+            </if>
+
+            <!-- 카테고리 그룹 -->
+            <if test="ledgerCategoryGroup != null">
+                AND LEDGER_CATEGORY_GROUP = #{ledgerCategoryGroup}
+            </if>
+
+            <!-- 세부 카테고리 -->
+            <if test="ledgerCategory != null">
+                AND LEDGER_CATEGORY = #{ledgerCategory}
+            </if>
+
+            <!-- 내용 검색 -->
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND LEDGER_DESCRIPTION LIKE CONCAT('%', #{searchKeyword}, '%')
+            </if>
+        </where>
+        ORDER BY LEDGER_PAYMENT_DATE DESC, CREATED_AT DESC
+    </select>
+
 
     <!-- ledger 생성 -->
     <insert id="insertLedger" parameterType="Ledger">

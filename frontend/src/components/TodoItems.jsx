@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const TodoItem = ({ todo, onToggle, onDelete }) => {
+const TodoItems = ({ todo, onToggle, onDelete }) => {
     const navigate = useNavigate();
 
     const getPriorityColor = (priority) => {
@@ -70,4 +70,4 @@ const TodoItem = ({ todo, onToggle, onDelete }) => {
     );
 };
 
-export default TodoItem;
+export default TodoItems;

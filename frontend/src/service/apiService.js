@@ -9,6 +9,18 @@ const api = axios.create({
     }
 });
 
+const cleanParams = (params) => {
+    return Object.fromEntries(
+        Object.entries(params)
+            .filter(([_, value]) => {
+                if (value === null || value === undefined) return false;
+                if (typeof value === 'string' && value.trim() === '') return false;
+                return true;
+            })
+    );
+};
+
+
 const apiService = {
     /**
      * 모든 todo 조회
@@ -67,6 +79,18 @@ const apiService = {
         } catch (error) {
             alert("상태 변경 실패 : {}", error);
         }
+    },
+
+    /**
+     * ledger 조회
+     */
+    // getLedgersByFilter: (filter) => api.get(
+    //     '/ledger/all',
+    //     { params: filter }).then(res => res.data),
+    getLedgersByFilter: (filter) => {
+        const cleaned = cleanParams(filter);
+        return api.get('/ledger/all', { params: cleaned })
+            .then(res => res.data);
     },
 
     /**

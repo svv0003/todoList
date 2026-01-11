@@ -422,7 +422,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
     const [ledgerDescription, setLedgerDescription] = useState('');
     const [ledgerPayment, setLedgerPayment] = useState('');
     const [ledgerPaymentDate, setLedgerPaymentDate] = useState('');
-    const [ledgerPaymentPeriod, setLedgerPaymentPeriod] = useState(0);
+    const [ledgerPaymentInstallment, setLedgerPaymentInstallment] = useState(0);
 
     const [ledgerType, setLedgerType] = useState('EXPENSE');
     const [ledgerCategoryGroup, setLedgerCategoryGroup] = useState('');
@@ -453,7 +453,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
             setLedgerPrice(initialData.ledgerPrice || 0);
             setLedgerPayment(initialData.ledgerPayment || '');
             setLedgerPaymentDate(initialData.ledgerPaymentDate || '');
-            setLedgerPaymentPeriod(initialData.ledgerPaymentPeriod || 0);
+            setLedgerPaymentInstallment(initialData.ledgerPaymentInstallment || 0);
             setLedgerDescription(initialData.ledgerDescription || '');
         }
     }, [initialData]);
@@ -466,7 +466,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
         if (!ledgerPrice) return false;
         if (!ledgerPayment) return false;
         if (!ledgerPaymentDate) return false;
-        if (!ledgerPaymentPeriod) return false;
+        if (!ledgerPaymentInstallment) return false;
         if (!ledgerDescription.trim()) return false;
         return true;
     };
@@ -486,7 +486,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
             ledgerPrice: Number(ledgerPrice),
             ledgerPayment,
             ledgerPaymentDate,
-            ledgerPaymentPeriod,
+            ledgerPaymentInstallment,
             ledgerDescription,
         };
 
@@ -539,7 +539,8 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
                     <label>상세 내역</label>
                     <select
                         value={ledgerCategory}
-                        onChange={(e) => setLedgerCategory(e.target.value)}
+                        onChange={(e) =>
+                            setLedgerCategory(e.target.value)}
                         disabled={!ledgerCategoryGroup}
                         required>
                         {!ledgerCategoryGroup && (
@@ -589,9 +590,9 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
                 <div className="form-group">
                     <label>할부</label>
                     <select
-                        value={ledgerPaymentPeriod}
+                        value={ledgerPaymentInstallment}
                         onChange={(e) =>
-                            setLedgerPaymentPeriod(e.target.value)}>
+                            setLedgerPaymentInstallment(e.target.value)}>
                         <option value="">선택하세요</option>
                         {paymentPeriod?.items.map((item) => (
                             <option key={item.value} value={item.value}>

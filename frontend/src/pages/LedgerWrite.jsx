@@ -13,15 +13,6 @@ const LedgerWrite = () => {
 
     const handleSubmit = async (ledgerData) => {
         try {
-            /*
-            if (isEdit) {
-                await apiService.updateTodo(existingTodo.todoNo, todoData);
-                alert('수정되었습니다.');
-            } else {
-                await apiService.addTodo(todoData);
-                alert('등록되었습니다.');
-            }
-             */
             if (isEdit) {
                 await apiService.updateLedger(existingLedger.ledgerId, ledgerData);
                 alert('수정되었습니다.');

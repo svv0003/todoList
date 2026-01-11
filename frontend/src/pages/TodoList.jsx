@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Header from "../components/Header";
 import apiService from '../service/apiService';
-import TodoItem from "../components/TodoItems";
+import TodoItems from "../components/TodoItems";
 import TodoFilter from "../components/TodoFilter";
 import TodoStatistics from "../components/TodoStatistics";
 
@@ -144,7 +144,7 @@ const TodoList = () => {
                     </div>)
                     : (<div className="todo-list">
                             {sortedTodos.map(todo => (
-                                <TodoItem
+                                <TodoItems
                                     key={todo.todoNo}
                                     todo={todo}
                                     onToggle={handleToggleStatus}

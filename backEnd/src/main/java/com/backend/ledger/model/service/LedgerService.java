@@ -1,6 +1,7 @@
 package com.backend.ledger.model.service;
 
 import com.backend.ledger.model.dto.Ledger;
+import com.backend.ledger.model.dto.LedgerFilter;
 import com.backend.todo.model.dto.Todo;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +12,10 @@ public interface LedgerService {
 
 
     // 전체 ledger 조회
-    List<Todo> getAllLedgers();
+    List<Ledger> getAllLedgersByFilter(LedgerFilter filter);
 
     // 특정 ledger 조회
-    Todo getLedgerById(int todoNo);
+    Ledger getLedgerById(int ledgerId);
 
 //    // 상태별 Todo 조회
 //    List<Todo> getTodosByStatus(String status);
