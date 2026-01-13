@@ -20,6 +20,7 @@ const TodoList = () => {
         fetchTodos();
     }, []);
 
+
     const fetchTodos = async () => {
         setLoading(true);
         try {
@@ -32,6 +33,7 @@ const TodoList = () => {
             setLoading(false);
         }
     }
+
 
     // 필터 변경
     const handleFilterChange = (newFilter) => {
@@ -56,6 +58,7 @@ const TodoList = () => {
 
     }
 
+
     // 상태 변경
     const handleToggleStatus = async (todoNo, newStatus) => {
         try {
@@ -72,11 +75,13 @@ const TodoList = () => {
         }
     }
 
+
     // 필터링
     const filteredTodos = todos.filter(todo => {
         if (filter === 'ALL') return true;
         return todo.todoStatus === filter;
     });
+
 
     // 정렬
     const sortedTodos = [...filteredTodos].sort((a, b) => {

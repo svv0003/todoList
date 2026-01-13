@@ -151,6 +151,7 @@
             LEDGER_PRICE,
             LEDGER_PAYMENT,
             LEDGER_PAYMENT_INSTALLMENT,
+            LEDGER_PAYMENT_STATUS,
             LEDGER_DESCRIPTION,
             LEDGER_PAYMENT_DATE
         )
@@ -161,6 +162,7 @@
                 #{ledgerPrice},
                 #{ledgerPayment},
                 #{ledgerPaymentInstallment},
+                "REGISTER",
                 #{ledgerDescription},
                 #{ledgerPaymentDate}
                )
@@ -178,6 +180,13 @@
             LEDGER_PAYMENT_INSTALLMENT = #{ledgerPaymentInstallment},
             LEDGER_DESCRIPTION = #{ledgerDescription},
             LEDGER_PAYMENT_DATE = #{ledgerPaymentDate}
+        WHERE LEDGER_ID = #{ledgerId}
+    </update>
+
+    <!-- ledger 취소 -->
+    <update id="updateLedgerStatus" parameterType="Ledger">
+        UPDATE TB_LEDGER
+        SET LEDGER_PAYMENT_STATUS = "CANCEL"
         WHERE LEDGER_ID = #{ledgerId}
     </update>
 

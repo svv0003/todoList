@@ -392,7 +392,7 @@ export const PAYMENT_INSTALLMENT = [
         group: 'INCOME',
         label: '할부 수',
         items: [
-            { value: '0', label: '(없음)' },
+            { value: '1', label: '(없음)' },
         ],
     },
     {
@@ -422,7 +422,7 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
     const [ledgerDescription, setLedgerDescription] = useState('');
     const [ledgerPayment, setLedgerPayment] = useState('');
     const [ledgerPaymentDate, setLedgerPaymentDate] = useState('');
-    const [ledgerPaymentInstallment, setLedgerPaymentInstallment] = useState(0);
+    const [ledgerPaymentInstallment, setLedgerPaymentInstallment] = useState(1);
 
     const [ledgerType, setLedgerType] = useState('EXPENSE');
     const [ledgerCategoryGroup, setLedgerCategoryGroup] = useState('');
@@ -453,13 +453,13 @@ const LedgerForm = ({ onSubmit, initialData, isEdit }) => {
             setLedgerPrice(initialData.ledgerPrice || 0);
             setLedgerPayment(initialData.ledgerPayment || '');
             setLedgerPaymentDate(initialData.ledgerPaymentDate || '');
-            setLedgerPaymentInstallment(initialData.ledgerPaymentInstallment || 0);
+            setLedgerPaymentInstallment(initialData.ledgerPaymentInstallment || 1);
             setLedgerDescription(initialData.ledgerDescription || '');
         }
     }, [initialData]);
 
     const validateForm = () => {
-        if (ledgerPrice <= 0) return false;
+        if (ledgerPrice <= 1) return false;
         if (!ledgerType) return false;
         if (!ledgerCategoryGroup) return false;
         if (!ledgerCategory) return false;

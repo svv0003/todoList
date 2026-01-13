@@ -14,8 +14,7 @@ const LedgerFilter = ({ currentFilter, onFilterChange }) => {
                 <label>기간</label>
                 <select
                     value={currentFilter.periodType}
-                    onChange={(e) => handleChange('periodType', e.target.value)}
-                >
+                    onChange={(e) => handleChange('periodType', e.target.value)}>
                     <option value="currentMonth">이번 달</option>
                     <option value="lastMonth">지난 달</option>
                     <option value="custom">직접 선택</option>
@@ -42,8 +41,7 @@ const LedgerFilter = ({ currentFilter, onFilterChange }) => {
                     value={currentFilter.ledgerCategoryGroup || ''}
                     onChange={(e) =>
                         handleChange('ledgerCategoryGroup', e.target.value || null)
-                    }
-                >
+                    }>
                     <option value="">전체</option>
                     <option value="FOOD">식비</option>
                     <option value="TRANSPORT">교통</option>
@@ -73,7 +71,6 @@ const LedgerFilter = ({ currentFilter, onFilterChange }) => {
                     }
                 />
             </div>
-
         </div>
     );
 };
