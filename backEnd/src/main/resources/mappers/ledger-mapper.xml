@@ -186,7 +186,7 @@
     <!-- ledger 취소 -->
     <update id="updateLedgerStatus" parameterType="Ledger">
         UPDATE TB_LEDGER
-        SET LEDGER_PAYMENT_STATUS = "CANCEL"
+        SET LEDGER_PAYMENT_INSTALLMENT = 0
         WHERE LEDGER_ID = #{ledgerId}
     </update>
 

@@ -142,6 +142,11 @@ public class LedgerServiceImpl implements LedgerService {
     }
 
     @Override
+    public void updateLedgerStatus(int ledgerId) {
+        ledgerMapper.updateLedgerStatus(ledgerId);
+    }
+
+    @Override
     public void deleteLedger(int ledgerId) {
         ledgerMapper.deleteLedger(ledgerId);
     }

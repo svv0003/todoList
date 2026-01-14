@@ -13,5 +13,7 @@ public interface LedgerMapper {
     Ledger selectLedgerById(int ledgerId);
     void insertLedger(Ledger ledger);
     void updateLedger(Ledger ledger);
+
+    void updateLedgerStatus(int ledgerId);
     void deleteLedger(int ledgerId);
 }

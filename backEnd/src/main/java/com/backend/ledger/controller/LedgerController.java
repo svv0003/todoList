@@ -79,6 +79,19 @@ public class LedgerController {
         }
     }
 
+    @PatchMapping("/status/{ledgerId}")
+    public void updateLedgerStatus(@RequestBody Ledger ledger,
+                                   @PathVariable int ledgerId) {
+        log.info("=====Ledger 수정=====");
+        try {
+//            ledger.setLedgerId(ledgerId);
+            ledgerService.updateLedgerStatus(ledgerId);
+            log.info("수정 성공 : {}", ledgerId);
+        } catch (Exception e){
+            log.error("수정 실패 : {}", e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{ledgerId}")
     public void updateLedger(@PathVariable int ledgerId) {
         log.info("=====Ledger 삭제=====");

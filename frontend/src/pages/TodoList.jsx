@@ -82,7 +82,6 @@ const TodoList = () => {
         return todo.todoStatus === filter;
     });
 
-
     // 정렬
     const sortedTodos = [...filteredTodos].sort((a, b) => {
         switch (sortBy) {

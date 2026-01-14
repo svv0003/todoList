@@ -51,7 +51,7 @@ const LedgerList = () => {
         }
     }
 
-    // 소득/지출/할부
+    // 소득/지출/할부 필터링
     const filteredLedgers = useMemo(() => {
         return ledgers.filter(ledger => {
             switch (typeFilter) {
@@ -69,26 +69,33 @@ const LedgerList = () => {
     }, [ledgers, typeFilter]);
 
 
-    // 정렬 변경
-    const handleSortChange = useMemo(() => {
-        const list = [...filteredLedgers];
-
+    // 필터링된 결과 정렬
+    // 원본 복제 후 정렬하도록 한다.
+    const getSortedLedgers = [...filteredLedgers].sort((a, b) => {
         switch (sortBy) {
             case 'paymentDateAsc':
-                return list.sort(
-                    (a, b) => new Date(a.paymentDate) - new Date(b.paymentDate)
-                );
-            case 'priceDesc':
-                return list.sort((a, b) => b.price - a.price);
-            case 'priceAsc':
-                return list.sort((a, b) => a.price - b.price);
+                return new Date(a.ledgerPaymentDate) - new Date(b.ledgerPaymentDate);
             case 'paymentDateDesc':
+                return new Date(b.ledgerPaymentDate) - new Date(a.ledgerPaymentDate);
+            case 'priceDesc':
+                return Number(b.ledgerPrice) - Number(a.ledgerPrice);
+            case 'priceAsc':
+                return Number(a.ledgerPrice) - Number(b.ledgerPrice);
             default:
-                return list.sort(
-                    (a, b) => new Date(b.paymentDate) - new Date(a.paymentDate)
-                );
+                return new Date(b.ledgerPaymentDate) - new Date(a.ledgerPaymentDate);
         }
-    }, [filteredLedgers, sortBy]);
+    });
+
+    // 정렬 변경
+    // const displayLedgers = useMemo(() => {
+    //     return getSortedLedgers(filteredLedgers, sortBy);
+    // }, [filteredLedgers, sortBy]);
+
+
+    const handleSortChange = (value) => {
+        console.log("기존 :", sortBy, "새 값: ", value);
+        setSortBy(value);
+    };
 
     // 삭제
     const handleDelete = async (ledgerId) => {
@@ -101,7 +108,7 @@ const LedgerList = () => {
             console.error('삭제 실패: ', error);
             alert('삭제에 실패했습니다.');
         }
-    }
+    };
 
 
     return (
@@ -151,21 +158,20 @@ const LedgerList = () => {
                 </div>
             </div>
 
-            {loading
-                ? (<div className="loading">로딩중...</div>)
-                : ledgers.length === 0 ? (
-                    <div className="empty">조회된 내역이 없습니다.</div>
-                ) : (
-                    <div className="ledger-list">
-                        {filteredLedgers.map(ledger => (
-                            <LedgerItems
-                                key={ledger.ledgerId}
-                                ledger={ledger}
-                                onDelete={handleDelete}
-                            />
-                        ))}
-                    </div>
-                )
+            {loading ? (
+                <div className="loading">로딩중...</div>
+            ) : ledgers.length === 0 ? (
+                <div className="empty">조회된 내역이 없습니다.</div>
+            ) : <div className="ledger-list">
+                    {getSortedLedgers.map(ledger => (
+                        <LedgerItems
+                            // key={ledger.ledgerId}
+                            key={`${ledger.ledgerId}`}
+                            ledger={ledger}
+                            onDelete={handleDelete}
+                        />
+                    ))}
+                </div>
             }
 
             {isFilterOpen && (

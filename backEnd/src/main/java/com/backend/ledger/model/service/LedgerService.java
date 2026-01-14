@@ -29,6 +29,9 @@ public interface LedgerService {
     // ledger 수정
     void updateLedger(Ledger ledger);
 
+    // ledger 상태 수정
+    void updateLedgerStatus(int ledgerId);
+
     // ledger 삭제
     void deleteLedger(int ledgerId);
 
