@@ -12,12 +12,11 @@ const LedgerList = () => {
     const navigate = useNavigate();
 
     const [filter, setFilter] = useState({
-        periodType: 'currentMonth',
+        // periodType: 'currentMonth',
+        ledgerType: 'ALL',
         ledgerCategoryGroup: null,
         ledgerCategory: null,
         searchKeyword: '',
-        year: null,
-        month: null,
         startDate: null,
         endDate: null,
     });
@@ -36,6 +35,7 @@ const LedgerList = () => {
 
     useEffect(() => {
         fetchLedgers();
+
     }, [filter])
 
     const fetchLedgers = async () => {
@@ -49,6 +49,20 @@ const LedgerList = () => {
         } finally {
             setLoading(false);
         }
+    }
+
+    const fetchFilters = () => {
+        /*
+        const [filter, setFilter] = useState({
+            ledgerType: 'ALL',
+            ledgerCategoryGroup: null,
+            ledgerCategory: null,
+            searchKeyword: '',
+            startDate: null,
+            endDate: null,
+        })
+         */
+        // if(filter.isEmpty())
     }
 
     // 소득/지출/할부 필터링
@@ -93,7 +107,6 @@ const LedgerList = () => {
 
 
     const handleSortChange = (value) => {
-        console.log("기존 :", sortBy, "새 값: ", value);
         setSortBy(value);
     };
 
@@ -196,12 +209,11 @@ const LedgerList = () => {
                                 className="reset-btn"
                                 onClick={() =>
                                     setTempFilter({
-                                        periodType: 'currentMonth',
+                                        // periodType: 'currentMonth',
+                                        ledgerType: 'ALL',
                                         ledgerCategoryGroup: null,
                                         ledgerCategory: null,
                                         searchKeyword: '',
-                                        year: null,
-                                        month: null,
                                         startDate: null,
                                         endDate: null,
                                     })
